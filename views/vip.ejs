@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Επίπεδα</title>
+</head>
+<body>
+    <div class="vip-app">
+        <div class="vip-app__header">
+            <h1 class="vip-app__title">Το τρέχον επίπεδό σου: 
+                <span id="userVipLevel" class="vip-app__current-level"><%= vipLevelId %></span>
+            </h1>
+            <p class="vip-app__description">
+                <% if (vipLevelId == 5) { %>
+                    Συγχαρητήρια, αυτό το επίπεδο προσφέρει τα μεγαλύτερα κέρδη.
+                    <% } else { %>
+                    Αναβάθμισε το επίπεδό σου για να μεγιστοποιήσεις τα κέρδη σου.<% } %>
+            </p>
+        </div>
+        
+        <div class="vip-app__section">
+            <!-- VIP Κάρτες με ονοματοδοσία BEM -->
+            <div class="vip-card vip-card--level-0">
+                <div class="vip-card__content">
+                    <h2 class="vip-card__title">Επίπεδο 0</h2>
+                    <p class="vip-card__feature">3 εργασίες</p>
+                    <p class="vip-card__feature">0,50€ κάθε εργασία</p>
+                    <p class="vip-card__feature">1,5€ κέρδος τη μέρα</p>
+                    <p class="vip-card__rate">μέχρι 20€ κέρδος εφάπαξ</p>
+                    <p class="vip-card__cost"><strong>Τιμή πακέτου: Δωρεάν</strong></p>
+                    <button class="vip-card__buy-button" onclick="openModal3(0)">Αναβάθμιση</button>
+                </div>
+            </div>
+        
+            <div class="vip-card vip-card--level-1">
+                <div class="vip-card__content">
+                    <h2 class="vip-card__title">Επίπεδο 1</h2>
+                    <p class="vip-card__feature">5 εργασίες</p>
+                    <p class="vip-card__feature">0,80€ κάθε εργασία</p>
+                    <p class="vip-card__feature">4€ κέρδος τη μέρα</p>
+                    <p class="vip-card__rate">120€ μηνιαίο κέρδος</p>
+                    <p class="vip-card__cost"><strong>Τιμή πακέτου: 100€</strong></p>
+                    <button class="vip-card__buy-button" onclick="openModal3(1)">Αναβάθμιση</button>
+                </div>
+            </div>
+        
+            <div class="vip-card vip-card--level-2">
+                <div class="vip-card__content">
+                    <h2 class="vip-card__title">Επίπεδο 2</h2>
+                    <p class="vip-card__feature">8 εργασίες</p>
+                    <p class="vip-card__feature">1,50€ κάθε εργασία</p>
+                    <p class="vip-card__feature">12€ κέρδος τη μέρα</p>
+                    <p class="vip-card__rate">360€ μηνιαίο κέρδος</p>
+                    <p class="vip-card__cost"><strong>Τιμή πακέτου: 300€</strong></p>
+
+                    <button class="vip-card__buy-button" onclick="openModal3(2)">Αναβάθμιση</button>
+                </div>
+            </div>
+        
+            <div class="vip-card vip-card--level-3">
+                <div class="vip-card__content">
+                    <h2 class="vip-card__title">Επίπεδο 3</h2>
+                    <p class="vip-card__feature">15 εργασίες</p>
+                    <p class="vip-card__feature">1,70€ κάθε εργασία</p>
+                    <p class="vip-card__feature">25,5€ κέρδος τη μέρα</p>
+                    <p class="vip-card__rate">765€ μηνιαίο κέρδος</p>
+                    <p class="vip-card__cost"><strong>Τιμή πακέτου: 600€</strong></p>
+                    <button class="vip-card__buy-button" onclick="openModal3(3)">Αναβάθμιση</button>
+                </div>
+            </div>
+        
+            <div class="vip-card vip-card--level-4">
+                <div class="vip-card__content">
+                    <h2 class="vip-card__title">Επίπεδο 4</h2>
+                    <p class="vip-card__feature">22 εργασίες</p>
+                    <p class="vip-card__feature">2€ κάθε εργασία</p>
+                    <p class="vip-card__feature">44€ κέρδος τη μέρα</p>
+                    <p class="vip-card__rate">1,320€ μηνιαίο κέρδος</p>
+                    <p class="vip-card__cost"><strong>Τιμή πακέτου: 1000€</strong></p>
+                    <button class="vip-card__buy-button" onclick="openModal3(4)">Αναβάθμιση</button>
+                </div>
+            </div>
+        
+            <div class="vip-card vip-card--level-5">
+                <div class="vip-card__content">
+                    <h2 class="vip-card__title">Επίπεδο 5</h2>
+                    <p class="vip-card__feature">60 εργασίες</p>
+                    <p class="vip-card__feature">2,30€ κάθε εργασία</p>
+                    <p class="vip-card__feature">138€ κέρδος τη μέρα</p>
+                    <p class="vip-card__rate">4,140€ μηνιαίο κέρδος</p>
+                    <p class="vip-card__cost"><strong>Τιμή πακέτου: 3000€</strong></p>
+                    <button class="vip-card__buy-button" onclick="openModal3(5)">Αναβάθμιση</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div style="padding-bottom: 100px;">
+
+    </div>
+
+    <div id="vipModal" class="modal modal--vip">
+        <div class="modal__content modal__content--vip">
+            <span class="modal__close" onclick="closeModal3()">&times;</span>
+            <h2 id="upg-to"></h2>
+            <p class="modal__instruction">Στείλε <strong id="usdtAmount"></strong> στη διεύθυνση:</p>
+            <p class="modal__address" id="addressTextContainer">
+                <span id="addressText">Φόρτωση διεύθυνσης...</span>
+                <span id="copyButton" onclick="copyToClipboard()">(Αντιγραφή Διεύθυνσης)</span>
+            </p>
+            <p id="notifyUser" style="color: rgb(181, 93, 15); font-size: 15px;">
+                <span style="font-weight: 600;">Η πληρωμή δεν έχει ληφθεί ακόμα.</span> Βεβαιώσου ότι έχεις στείλει το σωστό ποσό. Αν έχεις στείλει λιγότερο, συμπλήρωσε το υπόλοιπο.
+            </p>
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <button id="check-Btn" class="modal__check-payment-btn" onclick="checkPayment()">Έλεγχος Πληρωμής</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Η διεύθυνση αντιγράφηκε στο πρόχειρο.</div>
+
+    <div id="notification" class="notification notification-success">
+        <span class="notification-icon">&#x2713;</span>
+        <span class="notification-message">Αυτό είναι μια ειδοποίηση!</span>
+    </div>
+</body>
+</html>
+
+
+    <style>
+        #copyButton {
+            font-size: 13px;
+            color: #6C55F9;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #copyButton.copied {
+            /* background-color: #4caf50;
+            color: white;
+            transform: scale(1.1); */
+        }
+        #toast {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #6C55F9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            opacity: 0;
+            z-index: 1000;
+            animation: fadeInOut 3s ease-in-out;
+        }
+    
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+            10% {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            90% {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+        }
+    </style>
+    
+
+    <style>
+        #notifyUser{
+            display: none
+            ;
+        }
+        /* Core styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #ffffff;
+        }
+
+        /* VIP Application Structure */
+        .vip-app {
+            max-width: 500px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+            padding: 20px;
+            box-sizing: border-box;
+            margin: 10px;
+        }
+
+        .vip-app__header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .vip-app__title {
+            color: #2c3e50;
+            font-size: 22px;
+            line-height: 1.4;
+        }
+
+        .vip-app__current-level {
+            color: #6C55F9;
+            font-weight: bold;
+        }
+
+        .vip-app__description {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* VIP Card Section */
+        .vip-app__section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .vip-card {
+            background-color: #f9fbfc;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #dce1e5;
+            display: flex;
+            flex-direction: column;
+            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); */
+        }
+
+        .vip-card__content {
+            text-align: center;
+        }
+
+        .vip-card__title {
+            color: #34495e;
+            font-size: 18px;
+            margin: 0 0 8px;
+        }
+
+        .vip-card__feature,
+        .vip-card__rate,
+        .vip-card__cost {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .vip-card__cost {
+            font-size: 16px;
+            color: #6C55F9;
+            margin-top: 10px;
+        }
+
+        .vip-card__buy-button {
+            padding: 10px 20px;
+            background-color: #6C55F9;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Highlight style for user's current VIP */
+.vip-card--highlight {
+    border: 2px solid #6C55F9;
+    background-color: #e3f2fd;
+}
+
+        .vip-card__buy-button:hover {
+            background-color: #7f6cfb;
+        }
+
+        /* Modal Styles */
+        .modal--vip {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* padding-top: 100px; */
+        }
+
+        .modal__content--vip {
+            text-align: center;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .modal__close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .modal__title {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .modal__instruction {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .modal__address {
+            font-weight: bold;
+            color: #34495e;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+
+        .modal__check-payment-btn {
+            display: block;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #6C55F9;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .modal__check-payment-btn:hover {
+            background-color: #6C55F9;
+        }
+    </style>
+
+ 
+
+</body>
+</html>

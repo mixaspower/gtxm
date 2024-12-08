@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/public/styles/earn.css">
+    <title>Earn</title>
+    <style>
+        .notification {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 300px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    opacity: 0;
+    transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Success Notification */
+.notification-success {
+    background: linear-gradient(90deg, #28a745, #218838);
+}
+
+/* Error Notification */
+.notification-error {
+    background: linear-gradient(90deg, #dc3545, #c82333);
+}
+
+/* Info Notification */
+.notification-info {
+    background: linear-gradient(90deg, #17a2b8, #138496);
+}
+
+/* Notification when shown */
+.notification.show {
+    top: 20px;
+    opacity: 1;
+}
+
+.notification-icon {
+    font-size: 20px;
+}
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+        }
+        .earn-header h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            flex: 1;
+            text-align: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #ffffff;
+            border: 0px solid #d1d5db;
+            border-radius: 5px 5px 0 0;
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .tab-button.active {
+            background-color: #ffffff;
+            border-bottom: 3px solid #007bff;
+            color: #007bff;
+            font-weight: 600;
+        }
+        .tab-button:hover {
+            background-color: #f1f4f8;
+        }
+        .task-category {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            border: 0px solid #d1d5db;
+            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); */
+            margin-bottom: 20px;
+        }
+        .task-category.active {
+            display: block;
+        }
+        .task-list {
+            margin-top: 15px;
+        }
+        .task-item {
+            background-color: #fafafa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e5e7eb;
+            transition: border-color 0.2s;
+        }
+        .task-item:hover {
+            /* border-color: #007bff; */
+        }
+        .task-info h2 {
+            margin: 0 0 8px;
+            font-size: 17px;
+            color: #333;
+        }
+        .task-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .task-price {
+            color: #007bff;
+            font-weight: 600;
+        }
+        .task-actions {
+            margin-top: 10px;
+        }
+        .complete-task-btn {
+            background-color:  #1162ef00;
+            color: rgb(44, 44, 44);
+            border: 2px solid rgb(44, 44, 44);
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .complete-task-btn:hover {
+            background-color: rgb(44, 44, 44); 
+            color: white;
+        }
+        /* .go-to-task-btn {
+            background-color: #0056b3;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 500;
+            margin-right: 10px;
+        } */
+     
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            /* background-color: #ffffff; */
+            border: 1px solid #d1d5db;
+            padding: 20px;
+            border-radius: 8px;
+            /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+            width: 100%;
+        }
+        .modal-content {
+            text-align: center;
+        }
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+        }
+        .close-btn:hover {
+            /* color: #007bff; */
+        }
+
+        .copyIcon{
+            width: 15px; 
+            padding: 3px;
+            height: auto;
+            margin-left: 3px;
+            margin-bottom: -4px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="earn-app">
+        <div class="earn-header">
+            <!-- <h1>Available Tasks</h1> -->
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="showCategory('new-tasks')">
+                New Tasks (<%= newTasks.length %>)
+            </button>
+            <button class="tab-button" onclick="showCategory('pending-tasks')">
+                Pending (<%= pendingTasks.length %>)
+            </button>
+            <button class="tab-button" onclick="showCategory('approved-tasks')">
+                Approved (<%= approvedTasks.length %>)
+            </button>
+            <button class="tab-button" onclick="showCategory('failed-tasks')">
+                Failed (<%= failedTasks.length %>)
+            </button>
+        </div>
+
+        <!-- New Tasks Section -->
+        <div id="new-tasks" class="task-category active">
+            <h2>New Tasks</h2>
+        <div class="task-list">
+            <% if (newTasks.length > 0) { %>
+                <% newTasks.forEach((task, index) => { %>
+                    <div class="task-item" data-task-id="<%= index %>">
+                        <div class="task-info">
+                            <h2>Task: Comment</h2>
+                            <p><strong>Platform:</strong> <%= task.platform %></p>
+                            <p>
+                                <strong>Comment:</strong>
+                                <span style="cursor: pointer;" id="taskComment-<%= index %>" onclick="copyToClipboard2(<%= index %>)">"<%= task.comment %>"</span>
+                                <span>
+                                    <img style="cursor: pointer;" id="copyIcon-<%= index %>" class="copyIcon" src="/icons/copy1.png" alt="copy" onclick="copyToClipboard2(<%= index %>)">
+                                </span>
+                            </p>
+                            <p class="task-price"><strong>Price:</strong> $<%= task.price.toFixed(2) %></p>
+                            <p><strong>Link:</strong> <a href="<%= task.link %>" target="_blank"><%= task.link %></a></p>
+                        </div>
+                        <div class="task-actions">
+                            <a href="<%= task.link %>" target="_blank" class="go-to-task-btn">Go to Task</a>
+                            <button class="complete-task-btn" onclick="openModal('<%= index %>', '<%= task.price %>')">Complete Task</button>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No new tasks available today. Please check back later!</p>
+            <% } %>
+        </div>
+        </div>
+
+        <!-- Pending Tasks Section -->
+      <!-- Pending Tasks Section -->
+<div id="pending-tasks" class="task-category">
+    <h2>Pending Tasks</h2>
+    <div class="task-list">
+        <% if (pendingTasks.length > 0) { %>
+            <% pendingTasks.forEach(task => { %>
+                <div class="task-item">
+                    <div class="task-info">
+                        <h2>Task ID: <%= task.task_id %></h2>
+                        <p><strong>Completed:</strong> <%= new Date(task.created_at).toLocaleDateString() %></p>
+                        <p class="task-price"><strong>Pay Amount:</strong> $<%= parseFloat(task.pay_amount).toFixed(2) %></p>
+                        <p><strong>Status:</strong> Pending</p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p style="color: gray;">No pending tasks.</p>
+        <% } %>
+    </div>
+</div>
+
+
+        <!-- Approved Tasks Section -->
+        <div id="approved-tasks" class="task-category">
+            <h2>Approved Tasks</h2>
+            <div class="task-list">
+                <% if (approvedTasks.length > 0) { %>
+                    <% approvedTasks.forEach(task => { %>
+                        <div class="task-item">
+                            <div class="task-info">
+                                <h2>Task ID: <%= task.task_id %></h2>
+                                <p><strong>Completed:</strong> <%= new Date(task.created_at).toLocaleDateString() %></p>
+                                <p class="task-price"><strong>Pay Amount:</strong> $<%= parseFloat(task.pay_amount).toFixed(2) %></p>
+                                <p><strong>Status:</strong> Approved</p>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p style="color: rgb(168, 168, 168);">No approved tasks.</p>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Failed Tasks Section -->
+        <div id="failed-tasks" class="task-category">
+            <h2>Failed Tasks</h2>
+            <div class="task-list">
+                <% if (failedTasks.length > 0) { %>
+                    <% failedTasks.forEach(task => { %>
+                        <div class="task-item">
+                            <div class="task-info">
+                                <h2>Task ID: <%= task.task_id %></h2>
+                                <p><strong>Completed:</strong> <%= new Date(task.created_at).toLocaleDateString() %></p>
+                                <p class="task-price"><strong>Pay Amount:</strong> $<%= parseFloat(task.pay_amount).toFixed(2) %></p>
+                                <p><strong>Status:</strong> Failed</p>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p style="color: gray;">No failed tasks.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Confirm Upload -->
+    <div id="upload-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Upload Screenshot</h2>
+            <p>Please upload a screenshot that proves you completed this task.</p>
+            <label for="modal-upload-input" id="custom-file-input" class="custom-file-label">
+                <input type="file" id="modal-upload-input" accept="image/*" onchange="previewImage(this)" />
+                <span class="choose-file-text">Choose File</span>
+            </label>
+            <img id="modal-preview" class="screenshot-preview" src="" alt="Selected Screenshot" />
+            <button id="delete-image-btn" class="delete-btn" style="display: none;" onclick="deleteImage()">Delete Image</button>
+            <div id="error-message" style="color: red; display: none;">Please select an image.</div>
+            <button id="confirm-upload-btn" class="upload-btn" onclick="confirmUpload()">Confirm Upload</button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification notification-success">
+        <span class="notification-icon">&#x2713;</span> <!-- Checkmark icon -->
+        <span class="notification-message">This is a notification!</span>
+    </div>
+    
+
+    <script>
+        function showCategory(categoryId) {
+            document.querySelectorAll('.task-category').forEach(category => category.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+
+            document.getElementById(categoryId).classList.add('active');
+            document.querySelector(`.tab-button[onclick="showCategory('${categoryId}')"]`).classList.add('active');
+        }
+
+    </script>
+
+
+</body>
+</html>

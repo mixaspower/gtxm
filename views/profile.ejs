@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Προφίλ</title>
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache">
+</head>
+<body>
+    <div class="profile-app">
+        <div class="profile-header">
+            <!-- <img src="https://via.placeholder.com/80" alt="Εικόνα Προφίλ" class="profile-pic"> -->
+            <h2><%= user.email %></h2>
+            <p class="email"></p>
+        </div>
+    
+        <div class="profile-section">
+            <h3>Υπόλοιπο Λογαριασμού</h3>
+            <div class="card balance-card">
+                <div class="balance-info">
+                    <p id="theBalance" style="font-weight: 600;">€<%= user.balance %></p>
+                    <p>Διαθέσιμο υπόλοιπο</p>
+                </div>
+                <button onclick="openModal2()" class="withdraw-button" <%= user.balance == 0.00 ? 'disabled' : '' %>>
+                    Ανάληψη
+                </button>       
+             </div>
+        </div>
+    
+        <div class="profile-section">
+            <h3>Επίπεδο Κερδών</h3>
+            <div class="card vip-card">
+                <p><strong>Τρέχον Επίπεδο:</strong> <%= user.earn_level_id %></p>
+                <% if (user.earn_level_id !== 5) { %>
+                    <button onclick="navigate('vip')" class="vip-upgrade-button">Αναβάθμιση</button>
+                <% } %>
+            </div>
+        </div>
+        
+    
+        <div class="profile-section">
+            <h3>Συστάσεις</h3>
+            <div class="card referral-card">
+                <p style="cursor: pointer;" onclick="copyRefCode()">
+                    <span style="font-weight: 600; margin-right: 5px;">Κωδικός προσκλήσεων:</span><span id="theCode"><%= user.refCodeInvite %></span>
+                    <img src="/icons/copy1.png" style="width: 20px; height: auto; margin-left: 5px;" alt="" srcset="">
+                </p>
+    
+                <% if (user.invitedUsers && user.invitedUsers.length > 0) { %>
+                    <ul class="referral-list">
+                        <% user.invitedUsers.forEach(function(invitedUser) { %>
+                            <li>
+                                <div class="referral-item">
+                                    <span class="referral-name"><%= invitedUser.email %></span>
+                                    <span class="referral-date">Προσκλήθηκε: <%= new Date(invitedUser.created_at).toLocaleDateString('el-GR') %></span>
+                                </div>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p style="color: gray;">Κάθε φορά που κάποιος εγγράφεται χρησιμοποιώντας τον κωδικό σου, κερδίζεις bonus +10% από τα κέρδη του.</p>
+                <% } %>
+            </div>
+        </div>
+    
+        <div class="profile-section">
+            <h3>Στοιχεία Προφίλ</h3>
+            <div class="card profile-card">
+                <div class="profile-data">
+                    <p><strong>Email λογαριασμού:</strong> <%= user.email %></p>
+                    <p><strong>Μέλος από:</strong> <%= user.created_at %></p>
+                </div>
+            </div>
+        </div>
+        <div class="logout-container">
+            <button class="logout-button" onclick="logout()">Αποσύνδεση</button>
+        </div>
+        <div style="padding-bottom: 110px;"></div>
+    </div>
+    
+    <!-- Μοντάλ Ανάληψης -->
+    <div id="withdrawModalCustom" class="modal-custom">
+        <div class="modal-content-custom">
+            <span class="close-btn-custom" onclick="closeModal2()">&times;</span>
+            <h2 style="margin-bottom: 5px;">Ανάληψη Χρημάτων</h2>
+            <span style="color: gray; font-size: 14px;">Διαθέσιμο υπόλοιπο: </span><span style="color: gray; font-size: 14px;" id="availableBal"></span><span style="color: gray; font-size: 13px;" ></span>
+            <form id="withdrawFormCustom" onsubmit="validateForm(event)">
+                <div style="margin-top: 20px;">
+                    <label for="amountCustom">Ποσό (€):</label>
+                </div>
+               
+                <input 
+                style="width: 120px;" 
+                id="amountCustom" 
+                placeholder="Εισαγάγετε ποσό" 
+                min="1" 
+                type="text" 
+                pattern="^\d*[.,]?\d*$" 
+                oninput="validateAmountInput(event)" 
+            />                <label for="walletAddressCustom">Εισάγετε διεύθυνση πορτοφολιού Solana:</label>
+                <input type="text" id="walletAddressCustom" placeholder="Εισαγάγετε διεύθυνση πορτοφολιού" pattern="^[a-zA-Z0-9]{32,44}$" required>
+            
+                <button type="submit" class="send-btn-custom">Ανάληψη στο πορτοφόλι</button>
+            </form>
+            
+            <p id="errorMessageCustom" style="color: rgb(140, 0, 0); display: none;">Παρακαλώ εισάγετε έγκυρες πληροφορίες.</p>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification notification-success">
+        <span class="notification-icon">&#x2713;</span> <!-- Εικονίδιο Επιτυχίας -->
+        <span class="notification-message">Αυτή είναι μια ειδοποίηση!</span>
+    </div>
+</body>
+</html>
+
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+    
+      
+    
+        .profile-header {
+            background-color: #6C55F9;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            /* border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px; */
+        }
+    
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 3px solid white;
+        }
+    
+        .email {
+            margin-top: -5px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    
+        .profile-section {
+            padding: 20px;
+        }
+    
+        .profile-section h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+    
+        .card {
+            border: 1px solid #ebebeb;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+            margin-bottom: 20px;
+        }
+    
+        .balance-card, .vip-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    
+        .balance-info p:first-child {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #6C55F9;
+        }
+    
+        .balance-info p:last-child {
+            margin: 0;
+            color: #777;
+            font-size: 14px;
+        }
+    
+        .withdraw-button {
+            background-color: #6C55F9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+    
+        .withdraw-button:hover {
+            background-color: #6C55F9;
+        }
+    
+        .vip-card button,
+        .withdraw-button {
+            border-radius: 5px;
+        }
+    
+        .referral-card p {
+            display: flex;
+            align-items: center;
+        }
+    
+        .referral-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .referral-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+    
+        .referral-item {
+            display: flex;
+            justify-content: space-between;
+        }
+    
+        .referral-name {
+            font-weight: bold;
+        }
+    
+        .referral-date {
+            color: #777;
+            font-size: 12px;
+        }
+    
+        .profile-card p {
+            margin: 5px 0;
+        }
+    
+        .profile-card p strong {
+            color: #555;
+        }
+    
+        .vip-upgrade-button {
+            padding: 8px 15px;
+            background-color: #6C55F9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .vip-upgrade-button:hover {
+            background-color: #725dfb;
+        }
+    
+        .fas.fa-copy {
+            font-size: 18px;
+            color: #6C55F9;
+            cursor: pointer;
+        }
+    
+        .fas.fa-copy:hover {
+            color: #7964fc;
+        }
+    
+    
+        .withdraw-button:hover {
+            background-color: #8674fc;
+        }
+    
+        .withdraw-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .logout-container {
+    text-align: center;
+    padding: 20px;
+    /* background-color: #f9f9f9;  */
+    /* border-top: 1px solid #ddd;  */
+ padding-bottom: 30px;
+}
+
+.logout-button {
+    background-color: #ffffff;
+    color: rgb(140, 0, 0);
+    padding: 12px 24px;
+    border: 2px solid rgb(140, 0, 0);
+    border-radius: 25px; /* Rounded button */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.logout-button:hover {
+    background-color:rgb(147, 0, 0) ;
+    color: white;
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.logout-button:active {
+    transform: translateY(0); /* Reset position on click */
+}
+
+    </style>
+    
+    <style>
+        /* Modal styling */
+        .modal-custom {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .modal-content-custom {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        .close-btn-custom {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    
+        .close-btn-custom:hover,
+        .close-btn-custom:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    
+        form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    
+        form input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    
+        .send-btn-custom {
+            background-color: #6C55F9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+    
+        .send-btn-custom:hover {
+            background-color: #6C55F9;
+        }
+    
+        #errorMessageCustom {
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</body>
+</html>

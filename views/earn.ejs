@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/public/styles/earn.css">
+    <title>Εργασίες</title>
+    <style>
+   
+
+        body {
+            padding-bottom: 50px;
+            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+        }
+        .earn-header h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .tab-buttons {
+            overflow: scroll;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge: hide scrollbar */
+}
+
+        .tab-button {
+            flex: 1;
+            text-align: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #ffffff;
+            border: 0px solid #d1d5db;
+            border-radius: 5px 5px 0 0;
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .tab-button.active {
+            background-color: #ffffff;
+            border-bottom: 3px solid #6C55F9;
+            color: #6C55F9;
+            font-weight: 600;
+        }
+        .tab-button:hover {
+            background-color: #f1f4f8;
+        }
+        .task-category {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            border: 0px solid #d1d5db;
+            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); */
+            margin-bottom: 20px;
+        }
+        .task-category.active {
+            display: block;
+        }
+        .task-list {
+            margin-top: 15px;
+        }
+        .task-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e5e7eb;
+            transition: border-color 0.2s;
+        }
+        .task-item:hover {
+            /* border-color: #007bff; */
+        }
+        .task-info h2 {
+            margin: 0 0 8px;
+            font-size: 17px;
+            color: #333;
+        }
+        .task-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .task-price {
+            color: #6C55F9;
+            font-weight: 600;
+        }
+        .task-actions {
+            margin-top: 10px;
+        }
+        .complete-task-btn {
+            background-color:  #1162ef00;
+            color: rgb(44, 44, 44);
+            border: 2px solid rgb(44, 44, 44);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .complete-task-btn:hover {
+            background-color: rgb(44, 44, 44); 
+            color: white;
+        }
+        /* .go-to-task-btn {
+            background-color: #0056b3;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 500;
+            margin-right: 10px;
+        } */
+     
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            /* background-color: #ffffff; */
+            border: 1px solid #d1d5db;
+            padding: 20px;
+            border-radius: 8px;
+            /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+            width: 100%;
+        }
+        .modal-content {
+            text-align: center;
+        }
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+        }
+        .close-btn:hover {
+            /* color: #007bff; */
+        }
+
+        .copyIcon{
+            width: 15px; 
+            padding: 3px;
+            height: auto;
+            margin-left: 3px;
+            margin-bottom: -4px;
+        }
+
+    </style>
+</head>
+<body>
+       
+    <script>
+        function copyToClipboard2(index) {
+            // Get all copy icon elements
+            const allIcons = document.querySelectorAll('.copyIcon');
+
+            // Reset all icons to 'copy1.png'
+            allIcons.forEach(icon => {
+                icon.src = '/icons/copy1.png';
+            });
+
+            // Get the text content of the span with the specific index
+            const taskComment = document.getElementById(`taskComment-${index}`).textContent;
+
+            // Copy the text to the clipboard
+            navigator.clipboard.writeText(taskComment).then(() => {
+                // Change only the clicked icon to 'copy2.png'
+                document.getElementById(`copyIcon-${index}`).src = '/icons/copy2.png';
+
+                // Show the custom notification
+                showNotification('Αντιγράφηκε', 'info', 1000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+    <div class="earn-app">
+        <div class="earn-header">
+            <!-- <h1>Available Tasks</h1> -->
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="showCategory('new-tasks')">
+                Νέες εργασίες (<%= newTasks.length %>)
+            </button>
+            <button class="tab-button" onclick="showCategory('pending-tasks')">
+                Υπό αξιολόγηση (<%= pendingTasks.length %>)
+            </button>
+            <button class="tab-button" onclick="showCategory('approved-tasks')">
+                Εγκεκριμένες (<%= approvedTasks.length %>)
+            </button>
+            <button class="tab-button" onclick="showCategory('failed-tasks')">
+                Απορρίφθηκαν (<%= failedTasks.length %>)
+            </button>
+        </div>
+
+        <!-- New Tasks Section -->
+        <div id="new-tasks" class="task-category active">
+            <!-- <h2>Νέες εργασίες</h2> -->
+        <div class="task-list">
+            <% if (newTasks.length > 0) { %>
+                <% newTasks.forEach((task, index) => { %>
+                    <div class="task-item" data-task-id="<%= index %>">
+                        <div class="task-info">
+                            <h2>Εργασία: Σχόλιο</h2>
+                            <p><strong>Εφαρμογή:</strong> <%= task.platform %></p>
+                            <p onclick="copyToClipboard2(<%= index %>)">
+                                <strong>Σχόλιο:</strong>
+                                <span style="cursor: pointer;" id="taskComment-<%= index %>" onclick="copyToClipboard2(<%= index %>)">"<%= task.comment %>"</span>
+                                <span>
+                                    <img style="cursor: pointer;" id="copyIcon-<%= index %>" class="copyIcon" src="/icons/copy1.png" alt="copy" onclick="copyToClipboard2(<%= index %>)">
+                                </span>
+                            </p>
+                            <p class="task-price"><strong>Πληρωμή:</strong> <%= task.price.toFixed(2) %>€</p>
+                            <p><strong>Link:</strong> <a href="<%= task.link %>" target="_blank"><%= task.link %></a></p>
+                        </div>
+                        <div class="task-actions">
+                            <a href="<%= task.link %>" target="_blank" class="go-to-task-btn">Άνοιγμα</a>
+                            <button class="complete-task-btn" onclick="openModal('<%= index %>', '<%= task.price %>', '<%= task.link %>')">Ολοκλήρωση εργασίας</button>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Δεν υπάρχουν νέες εργασίες διαθέσιμες σήμερα.</p>
+            <% } %>
+        </div>
+        </div>
+<!-- Ενότητα Εκκρεμών Εργασιών -->
+<div id="pending-tasks" class="task-category">
+    <!-- <h2>Εκκρεμείς Εργασίες</h2> -->
+    <div class="task-list">
+        <% if (pendingTasks.length > 0) { %>
+            <% pendingTasks.forEach(task => { %>
+                <div class="task-item">
+                    <div class="task-info">
+                        <h2>Κωδικός Εργασίας: <%= task.task_id %></h2>
+                        <p><strong>Ολοκληρώθηκε:</strong> <%= new Date(task.created_at).toLocaleDateString() %></p>
+                        <p class="task-price"><strong>Ποσό πληρωμής: </strong><%= parseFloat(task.pay_amount).toFixed(2) %>€</p>
+                        <p><strong>Κατάσταση:</strong> Εκκρεμής</p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p style="color: gray;">Δεν υπάρχουν εργασίες υπό αξιολόγηση.</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Ενότητα Εγκεκριμένων Εργασιών -->
+<div id="approved-tasks" class="task-category">
+    <!-- <h2>Εγκεκριμένες Εργασίες</h2> -->
+    <div class="task-list">
+        <% if (approvedTasks.length > 0) { %>
+            <% approvedTasks.forEach(task => { %>
+                <div class="task-item">
+                    <div class="task-info">
+                        <h2>Κωδικός Εργασίας: <%= task.task_id %></h2>
+                        <p><strong>Ολοκληρώθηκε:</strong> <%= new Date(task.created_at).toLocaleDateString() %></p>
+                        <p class="task-price"><strong>Ποσό πληρωμής: </strong><%= parseFloat(task.pay_amount).toFixed(2) %>€</p>
+                        <p><strong>Κατάσταση:</strong> Εγκεκριμένη</p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p style="color: rgb(168, 168, 168);">Δεν υπάρχουν εγκεκριμένες εργασίες.</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Ενότητα Αποτυχημένων Εργασιών -->
+<div id="failed-tasks" class="task-category">
+    <!-- <h2>Αποτυχημένες Εργασίες</h2> -->
+    <div class="task-list">
+        <% if (failedTasks.length > 0) { %>
+            <% failedTasks.forEach(task => { %>
+                <div class="task-item">
+                    <div class="task-info">
+                        <h2>Κωδικός Εργασίας: <%= task.task_id %></h2>
+                        <p><strong>Ολοκληρώθηκε:</strong> <%= new Date(task.created_at).toLocaleDateString() %></p>
+                        <p class="task-price"><strong>Ποσό Πληρωμής:</strong> $<%= parseFloat(task.pay_amount).toFixed(2) %></p>
+                        <p><strong>Κατάσταση:</strong> Αποτυχημένη</p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p style="color: gray;">Δεν υπάρχουν απορριφθέντες εργασίες.</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Παράθυρο Επιβεβαίωσης Μεταφόρτωσης -->
+<div id="upload-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>Μεταφόρτωση Στιγμιότυπου</h2>
+        <p>Παρακαλώ μεταφορτώστε ένα στιγμιότυπο που αποδεικνύει ότι ολοκληρώσατε αυτή την εργασία.</p>
+        <label for="modal-upload-input" id="custom-file-input" class="custom-file-label">
+            <input type="file" id="modal-upload-input" accept="image/*" onchange="previewImage(this)" />
+            <span class="choose-file-text">Επιλογή Αρχείου</span>
+        </label>
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">
+            <img id="modal-preview" class="screenshot-preview" src="" alt="Επιλεγμένο Στιγμιότυπο" />
+        </div>
+        <button id="delete-image-btn" class="delete-btn" style="display: none;" onclick="deleteImage()">Διαγραφή Εικόνας</button>
+        <div id="error-message" style="color: red; display: none;">Παρακαλώ επιλέξτε μια εικόνα.</div>
+        <button id="confirm-upload-btn" class="upload-btn" onclick="confirmUpload()">Επιβεβαίωση Μεταφόρτωσης</button>
+    </div>
+</div>
+
+<div id="notification" class="notification notification-success" style="z-index: 999;">
+    <span class="notification-icon">&#x2713;</span> <!-- Εικονίδιο Ελέγχου -->
+    <span class="notification-message" style="font-weight: 700;">Γεια σας</span>
+</div>
+
+<script>
+    function showCategory(categoryId) {
+        document.querySelectorAll('.task-category').forEach(category => category.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+
+        document.getElementById(categoryId).classList.add('active');
+        document.querySelector(`.tab-button[onclick="showCategory('${categoryId}')"]`).classList.add('active');
+    }
+</script>
+
+

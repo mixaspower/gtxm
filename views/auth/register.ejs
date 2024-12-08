@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Εγγραφή - taskario</title>
+    <link rel="icon" type="image/x-icon" href="../assets/img/rocket.png">
+    <style>
+                .navbar-brand {
+  font-weight: 600;
+  padding-top: 10px;
+  padding-bottom: 10px;
+text-decoration: none;  
+}
+        .chill{
+            margin-left: -110px; display: flex; justify-content: center; align-items: center;
+        }
+        @media (max-width: 500px) {
+            .chill{
+                display: contents;
+            }
+        }
+
+
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #loading-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        #loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6C55F9;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+      #message-box {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+#message-box.success {
+  border-color: #2ecc71;
+  background-color: #ecf9f2;
+  color: #27ae60;
+}
+
+#message-box.error {
+  border-color: rgb(140, 0, 0);
+  background-color: #fef0f0;
+  color: rgb(140, 0, 0);
+}
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo{
+    padding-top: 20px;
+    position: absolute;
+    left: 10%;
+    top: 2%;
+    cursor: pointer;
+}
+
+        .logo img {
+            width: 100px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .register-app {
+            width: 90%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            /* Κεντράρισμα περιεχομένου */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+        }
+
+        .register-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .register-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .register-form label {
+            display: block;
+            font-size: 14px;
+            color: #34495e;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .register-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s; /* Smooth transition */
+        }
+
+        input:focus {
+  border-color: #6C55F9; /* Change to desired border color */
+  outline: none; /* Keeps the outline disabled */
+}
+
+        .register-form button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #6C55F9;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .register-form button:hover {
+            background-color: #7f6df7;
+            /* transform: translateY(-3px); */
+        }
+
+        .register-footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-footer a {
+            color: #6C55F9;
+            text-decoration: none;
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            background-color: #f9f9f9;
+        }
+        
+    </style>
+    <style>
+      
+        /* Loader styles */
+        .loader {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            z-index: 1000;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fade overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo at the top left -->
+    <div class="logo">
+        <!-- <a onclick="location.href='/'" class="navbar-brand" style="color: black; font-size: 1.25rem;">social<span style="color: #6C55F9;">boost</span></a> -->
+        <a style="font-size: 22px;" onclick="location.href='/'" class="navbar-brand">task<span style="color: #6C55F9; cursor: pointer;">ario</span></a>
+    </div>
+
+    <div id="loading-overlay" aria-hidden="true">
+        <div id="loading-spinner" role="status" aria-label="Loading"></div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="main-content">
+        <!-- Registration Form -->
+        <div class="register-app">
+            <!-- Επικεφαλίδα -->
+            <div class="register-header">
+                                    <h1>Δημιουργία λογαρισμού</h1>
+                <!-- <div class="chill"> -->
+                    <!-- <div style="display: flex; justify-content: center; align-items: center;margin-right: 50px;">
+                       <a href="" style="text-decoration: none; color: rgb(139, 139, 139);"><span style=""><img style="margin-bottom: -4px; height: 20px; width: auto;margin-right: 4px;" src="/icons/back.png" alt="" srcset="">Αρχική</span></a> 
+                    </div> -->
+                    <!-- <h1>Δημιουργία λογαρισμού</h1> -->
+                <!-- </div> -->
+                <p>Ξεκίνα να κερδίζεις σήμερα.</p>
+            </div>
+
+            <!-- Φόρμα Εγγραφής -->
+            <div class="register-form">
+                <form action="/register" method="POST">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Γράψε το email σου" required>
+                    
+                    <label for="password">Κωδικός πρόσβασης:</label>
+                    <input type="password" id="password" name="password" placeholder="Διάλεξε έναν κωδικό" required>
+                    
+                    <label for="confirm-password">Επιβεβαίωση κωδικού:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Επιβεβαίωσε τον κωδικό σου" required>
+                    
+                    <label for="referral-code">Κωδικός πρόσκλησης (προαιρετικό):</label>
+                    <input type="text" id="referral-code" name="referral-code" placeholder="Γράψε τον κωδικό πρόσκλησης, αν έχεις">
+                    
+                    <button type="submit">Εγγραφή</button>
+                    <div class="messages">
+                        <div id="message-box" style="display: none; color: #e74c3c; font-size: 14px; margin-bottom: 15px;">
+                            <!-- Εδώ θα εμφανίζονται μηνύματα -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+
+            <!-- Υποσέλιδο -->
+            <div class="register-footer">
+                <p>Έχεις ήδη λογαριασμό; <a href="/login">Σύνδεση</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader and overlay -->
+    <div class="overlay" id="overlay"></div>
+    <div class="loader" id="loader"></div>
+
+    <svg id="wave" style="margin-bottom:-10px; transform:rotate(0deg); transition: 0.3s" viewBox="0 0 1440 170" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0"><stop stop-color="rgba(108, 85, 249, 1)" offset="0%"></stop><stop stop-color="rgba(60.663, 31.69, 238.28, 0.78)" offset="100%"></stop></linearGradient></defs><path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-0)" d="M0,34L40,36.8C80,40,160,45,240,39.7C320,34,400,17,480,31.2C560,45,640,91,720,99.2C800,108,880,79,960,70.8C1040,62,1120,74,1200,90.7C1280,108,1360,130,1440,121.8C1520,113,1600,74,1680,65.2C1760,57,1840,79,1920,93.5C2000,108,2080,113,2160,119C2240,125,2320,130,2400,110.5C2480,91,2560,45,2640,22.7C2720,0,2800,0,2880,19.8C2960,40,3040,79,3120,102C3200,125,3280,130,3360,130.3C3440,130,3520,125,3600,102C3680,79,3760,40,3840,31.2C3920,23,4000,45,4080,51C4160,57,4240,45,4320,53.8C4400,62,4480,91,4560,96.3C4640,102,4720,85,4800,76.5C4880,68,4960,68,5040,82.2C5120,96,5200,125,5280,119C5360,113,5440,74,5520,51C5600,28,5680,23,5720,19.8L5760,17L5760,170L5720,170C5680,170,5600,170,5520,170C5440,170,5360,170,5280,170C5200,170,5120,170,5040,170C4960,170,4880,170,4800,170C4720,170,4640,170,4560,170C4480,170,4400,170,4320,170C4240,170,4160,170,4080,170C4000,170,3920,170,3840,170C3760,170,3680,170,3600,170C3520,170,3440,170,3360,170C3280,170,3200,170,3120,170C3040,170,2960,170,2880,170C2800,170,2720,170,2640,170C2560,170,2480,170,2400,170C2320,170,2240,170,2160,170C2080,170,2000,170,1920,170C1840,170,1760,170,1680,170C1600,170,1520,170,1440,170C1360,170,1280,170,1200,170C1120,170,1040,170,960,170C880,170,800,170,720,170C640,170,560,170,480,170C400,170,320,170,240,170C160,170,80,170,40,170L0,170Z"></path></svg>   
+    <!-- <footer>
+
+    Footer -->
+    <!-- <footer>
+        <p id="copyright" style="margin: 0; font-size: 14px;">&copy; 2024. All rights reserved.</p>
+    </footer> -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('.register-form form');
+            const messageBox = document.getElementById('message-box');
+            const loader = document.getElementById('loader');
+            const overlay = document.getElementById('overlay');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent default form submission
+
+                // Clear any existing messages
+                messageBox.style.display = 'none';
+                messageBox.textContent = '';
+
+                // Gather form data
+                const formData = new FormData(form);
+                const data = {
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    confirmPassword: formData.get('confirm-password'),
+                    refCodeInvitedBy: formData.get('referral-code') || null,
+                };
+
+                // Validate client-side before sending to the server
+                if (data.password !== data.confirmPassword) {
+                    messageBox.textContent = 'Οι κωδικοί δεν ταιριάζουν.';
+                    messageBox.style.display = 'block';
+                    return;
+                }
+
+                try {
+                    showLoader();
+                    // Send the request to the server
+                    const response = await fetch('/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: data.email,
+                            password: data.password,
+                            refCodeInvitedBy: data.refCodeInvitedBy,
+                        }),
+                    });
+
+                    hideLoader();
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // On success, redirect the user
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        // On error, display the error message
+                        messageBox.textContent = result.error || 'Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξανά.';
+                        messageBox.style.display = 'block';
+                    }
+                } catch (error) {
+                    // Handle network errors or unexpected issues
+                    messageBox.textContent = 'Αποτυχία σύνδεσης με τον διακομιστή. Παρακαλώ δοκιμάστε αργότερα.';
+                    messageBox.style.display = 'block';
+                    console.error('Registration error:', error);
+                } finally {
+                    // Hide the loader
+                    loader.style.display = 'none';
+                    overlay.style.display = 'none';
+                }
+            });
+        });
+
+
+        function showLoader() {
+        document.getElementById('loading-overlay').style.display = 'flex';
+    }
+
+    function hideLoader() {
+        document.getElementById('loading-overlay').style.display = 'none';
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <div class="home-app">
+        <div class="home-header">
+            <h1>Kαλωσήρθες <span style="color: #6C55F9;"><%= user.email %></span></h1>
+            <p style="color: rgb(113, 113, 113); font-weight: 600; margin-top: 30px;">Ας δούμε τι συμβαίνει αυτόν τον καιρό</p>
+        </div>
+    
+     
+    
+        <!-- User Progress -->
+        <div class="user-progress">
+            <h3>Πρόοδος ελληνικής κοινότητας σήμερα</h3>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <h3>Ολοκληρώθηκαν</h3>
+                    <p>15,000+</p>
+                    <h3>εργασίες</h3>
+                </div>
+                <div class="stat-item">
+                    <h3>Δημιουργήθηκαν</h3>
+                    <p>74 νέοι</p>
+                    <h3>λογαριασμοί</h3>
+                </div>
+                <div class="stat-item">
+                    <h3>Αναβάθμισαν</h3>
+                    <p>15</p>
+                    <h3>χρήστες</h3>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Upcoming Events -->
+        <div class="upcoming-events">
+            <h3>Επερχόμενες Εκδηλώσεις</h3>
+            <div class="event-item">
+                <h3>Εκδήλωση: Πρώτη γνωριμία στη Λάρισα</h3>
+                <p>Ημερομηνία: 14 Ιανουρίου 2025</p>
+                <p>Ώρα: 18:30</p>
+                <p>Τοποθεσία: Ηρ. Πολυτεχνίου 78, Λάρισα 41223</p>
+                <p>Συμμετάσχετε σε μια ζωντανή συνεδρία για το πώς να αξιοποιήσετε στο έπακρο τον χρόνο σας στην πλατφόρμα</p>
+            </div>
+            <div class="event-item">
+                <h3>Εκδήλωση: Συνάντηση μελών Level 5 στη Θεσσαλονίκη</h3>
+                <p>Ημερομηνία: 5 Φεβρουαρίου 2025</p>
+                <p>Ώρα: 19:30</p>
+                <p>Τοποθεσία: Αριστοτέλους 8, Θεσσαλονίκη 54623</p>
+                <p>Γνωριμία μελών επιπέδου 4 και επιπέδου 5</p>
+            </div>
+        </div>
+    
+        <!-- Top Performers Carousel -->
+        <div class="top-performers">
+            <h3>Κορυφαίοι Χρήστες</h3>
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <h3>billionis94@gmail.com</h3>
+                        <p>Κέρδη: €5.233,22</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>mariosxnxx@gmail.com</h3>
+                        <p>Κέρδη: €4.800,01</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>alex2li004@gmail.com</h3>
+                        <p>Κέρδη: €4.102,21</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>nikoslakis99@gmail.com</h3>
+                        <p>Κέρδη: €4.200,93</p>
+                    </div>
+                    <!-- Επανάληψη για ομαλή κύλιση -->
+                    <div class="carousel-item">
+                        <h3>billionispaoki@gmail.com</h3>
+                        <p>Κέρδη: €5.233,22</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>mariosxnxx@gmail.com</h3>
+                        <p>Κέρδη: €4.800,01</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>alex2Li004@gmail.com</h3>
+                        <p>Κέρδη: €4.102,21</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>nikoslakis99@gmail.com</h3>
+                        <p>Κέρδη: €4.200,93</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding-bottom: 120px;"></div>
+    </div>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;            
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    
+        .home-app {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    
+        .home-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+    
+        .home-header .user-name {
+            color: #6C55F9;
+        }
+    
+        .home-header p {
+            color: #6C55F9;
+            font-size: 16px;
+        }
+    
+        .platform-info, .user-progress, .upcoming-events {
+            margin-top: 40px;
+        }
+    
+        .platform-info p, .upcoming-events p, .event-item p {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+    
+        .user-progress .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+    
+        .progress-stats .stat-item {
+            width: 30%;
+        }
+    
+        .progress-stats .stat-item h3 {
+            font-size: 16px;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+    
+        .progress-stats .stat-item p {
+            font-size: 18px;
+            color: #6C55F9;
+            font-weight: bold;
+        }
+    
+        .upcoming-events .event-item {
+            background-color: #f9fbfc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+    
+        .upcoming-events .event-item h3 {
+            font-size: 16px;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+    
+        .top-performers {
+            margin-top: 40px;
+        }
+    
+        .carousel {
+            overflow: hidden;
+            position: relative;
+        }
+    
+        .carousel-track {
+            display: flex;
+            gap: 10px;
+            width: max-content;
+            animation: scroll 10s linear infinite;
+        }
+    
+        .carousel-item {
+            min-width: 150px;
+            background-color: #f9fbfc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .carousel-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    
+        .carousel-item h3 {
+            font-size: 16px;
+            color: #34495e;
+            margin-bottom: 5px;
+        }
+    
+        .carousel-item p {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+    
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+    
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+    
+        .home-actions .action-btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #6C55F9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+    
+        .home-actions .action-btn:hover {
+            background-color: #7965fa;
+            transform: translateY(-3px);
+        }
+    
+        @media (max-width: 600px) {
+            .progress-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+    
+            .progress-stats .stat-item {
+                width: 100%;
+            }
+    
+            .home-actions .action-btn {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+    
+</body>
+</html>

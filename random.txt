@@ -1,0 +1,129 @@
+   <style>
+      #message-box {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+#message-box.success {
+  border-color: #2ecc71;
+  background-color: #ecf9f2;
+  color: #27ae60;
+}
+
+#message-box.error {
+  border-color: #e74c3c;
+  background-color: #fef0f0;
+  color: #e74c3c;
+}
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .logo img {
+            width: 100px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-app {
+            width: 90%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            /* Κεντράρισμα περιεχομένου */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+        }
+
+        .register-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .register-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .register-form label {
+            display: block;
+            font-size: 14px;
+            color: #34495e;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .register-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .register-form button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4A90E2;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .register-form button:hover {
+            background-color: #357ABD;
+            transform: translateY(-3px);
+        }
+
+        .register-footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-footer a {
+            color: #4A90E2;
+            text-decoration: none;
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            background-color: #f9f9f9;
+        }
+    </style>

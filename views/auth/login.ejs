@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../assets/img/rocket.png">
+    <title>Σύνδεση - taskario</title>
+    
+    <style>
+.logo{
+    padding-top: 20px;
+    position: absolute;
+    left: 10%;
+    top: 2%;
+    cursor: pointer;
+}
+
+        .navbar-brand {
+  font-weight: 600;
+  padding-top: 10px;
+  padding-bottom: 10px;
+text-decoration: none;  
+}
+
+#loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+    
+        #loading-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        #loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6C55F9;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+       
+
+        .logo img {
+            width: 100px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-app {
+            width: 90%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .login-form label {
+            display: block;
+            font-size: 14px;
+            color: #34495e;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            box-sizing: border-box;
+        
+            transition: border-color 0.3s; /* Smooth transition */
+        }
+
+        input:focus {
+  border-color: #6C55F9; /* Change to desired border color */
+  outline: none; /* Keeps the outline disabled */
+}
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #6C55F9;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .login-form button:hover {
+            background-color: #8472f7;
+            /* transform: translateY(-3px); */
+        }
+
+        .login-footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .login-footer a {
+            color: #6C55F9;
+            text-decoration: none;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo at the top left -->
+    <div class="logo">
+        <!-- <a onclick="location.href='/'" class="navbar-brand" style="color: black; font-size: 1.25rem;">social<span style="color: #6C55F9;">boost</span></a> -->
+        <a style="font-size: 22px;" onclick="location.href='/'" class="navbar-brand">task<span style="color: #6C55F9; cursor: pointer;">ario</span></a>
+    </div>
+
+    <div id="loading-overlay" aria-hidden="true">
+        <div id="loading-spinner" role="status" aria-label="Loading"></div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="main-content">
+        <!-- Login Form -->
+        <div class="login-app">
+            <!-- Header -->
+            <div class="login-header">
+                <div style="margin-left: -110px; display: flex; justify-content: center; align-items: center;">
+                    <div style="display: flex; justify-content: center; align-items: center;margin-right: 40px;">
+                       <a onclick="location.href='/'" style="cursor: pointer; text-decoration: none; color: rgb(139, 139, 139); margin-bottom: -4px;"><span style=""><img style="margin-bottom: -4px; height: 20px; width: auto;margin-right: 4px;" src="/icons/ba.png" alt="" srcset="">Αρχική</span></a> 
+                    </div>
+                    <h1>Σύνδεση</h1>
+                </div>
+                <p>Συνδέσου για να συνεχίσεις.</p>
+            </div>
+
+            <div class="login-form">
+                <form id="login-form">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Γράψε το email σου" required>
+                    
+                    <label for="password">Κωδικός</label>
+                    <input type="password" id="password" name="password" placeholder="Γράψε τον κωδικό σου" required>
+                    
+                    <button type="submit">Σύνδεση</button>
+                    <!-- Εμφάνιση μηνύματος σφάλματος -->
+                    <p id="error-message" style="color: rgb(140, 0, 0); display: none;"></p>
+                </form>
+            </div>
+            
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>Δεν έχεις λογαριασμό; <a href="/register">Εγγραφή</a></p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <svg id="wave" style="margin-bottom:-10px; transform:rotate(0deg); transition: 0.3s" viewBox="0 0 1440 170" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0"><stop stop-color="rgba(108, 85, 249, 1)" offset="0%"></stop><stop stop-color="rgba(60.663, 31.69, 238.28, 0.78)" offset="100%"></stop></linearGradient></defs><path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-0)" d="M0,34L34.3,36.8C68.6,40,137,45,206,39.7C274.3,34,343,17,411,31.2C480,45,549,91,617,99.2C685.7,108,754,79,823,70.8C891.4,62,960,74,1029,90.7C1097.1,108,1166,130,1234,121.8C1302.9,113,1371,74,1440,65.2C1508.6,57,1577,79,1646,93.5C1714.3,108,1783,113,1851,119C1920,125,1989,130,2057,110.5C2125.7,91,2194,45,2263,22.7C2331.4,0,2400,0,2469,19.8C2537.1,40,2606,79,2674,102C2742.9,125,2811,130,2880,130.3C2948.6,130,3017,125,3086,102C3154.3,79,3223,40,3291,31.2C3360,23,3429,45,3497,51C3565.7,57,3634,45,3703,53.8C3771.4,62,3840,91,3909,96.3C3977.1,102,4046,85,4114,76.5C4182.9,68,4251,68,4320,82.2C4388.6,96,4457,125,4526,119C4594.3,113,4663,74,4731,51C4800,28,4869,23,4903,19.8L4937.1,17L4937.1,170L4902.9,170C4868.6,170,4800,170,4731,170C4662.9,170,4594,170,4526,170C4457.1,170,4389,170,4320,170C4251.4,170,4183,170,4114,170C4045.7,170,3977,170,3909,170C3840,170,3771,170,3703,170C3634.3,170,3566,170,3497,170C3428.6,170,3360,170,3291,170C3222.9,170,3154,170,3086,170C3017.1,170,2949,170,2880,170C2811.4,170,2743,170,2674,170C2605.7,170,2537,170,2469,170C2400,170,2331,170,2263,170C2194.3,170,2126,170,2057,170C1988.6,170,1920,170,1851,170C1782.9,170,1714,170,1646,170C1577.1,170,1509,170,1440,170C1371.4,170,1303,170,1234,170C1165.7,170,1097,170,1029,170C960,170,891,170,823,170C754.3,170,686,170,617,170C548.6,170,480,170,411,170C342.9,170,274,170,206,170C137.1,170,69,170,34,170L0,170Z"></path></svg>   
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Αποτροπή κανονικής υποβολής φόρμας
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
+
+    try {
+        showLoader();
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+        hideLoader();
+        if (result.success) {
+            // Ανακατεύθυνση στο dashboard σε περίπτωση επιτυχίας
+            window.location.href = result.redirect;
+        } else {
+            // Εμφάνιση μηνύματος σφάλματος
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = result.message;
+        }
+    } catch (err) {
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = err;
+        console.error(err);
+    }
+});
+
+
+
+function showLoader() {
+        document.getElementById('loading-overlay').style.display = 'flex';
+    }
+
+    function hideLoader() {
+        document.getElementById('loading-overlay').style.display = 'none';
+    }
+    </script>
+</body>
+</html>
